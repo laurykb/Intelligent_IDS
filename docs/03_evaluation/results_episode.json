@@ -1,0 +1,19 @@
+{
+  "n_episodes": 51,
+  "F1-max": {
+    "seuil": 0.8545135379981471,
+    "detection_episode": 0.8627450980392157,
+    "latence_med": 4.0,
+    "latence_moy": 4.159090909090909,
+    "latence_max": 16.0,
+    "fenetres_normales_alertees": 0.0024409453944242297
+  },
+  "haute-precision": {
+    "seuil": 0.9767364300219693,
+    "detection_episode": 0.7647058823529411,
+    "latence_med": 4.0,
+    "latence_moy": 5.564102564102564,
+    "latence_max": 46.0,
+    "fenetres_normales_alertees": 0.0009633597823327627
+  }
+}
