@@ -271,3 +271,34 @@
 ### Prochaine etape
 - **VAGUE 1** (validee, on y va) : ROC + AUC-ROC, optimisation d'hyperparametres, latence + metriques
   par episode, SHAP, multi-seed deep.
+
+---
+
+## 2026-06-19 - VAGUE 1 (credibilite) : 5/7 fait, 2 runs reportes sur autre PC
+
+### Fait (synthese : docs/02_experiences/vague1_credibilite.md)
+- **Item 1 ROC** [`06a_roc.py`] : AUC-ROC **0,977** vs PR-AUC 0,735 (base-rate -> PR reste primaire).
+  OOF sauvegarde (`oof_scores.npz`) pour l'item 3.
+- **Item 3 latence/episode** [`06c_latency_episode.py`] : 51 episodes ; **86 % detectes en ~4 s**
+  (seuil F1-max, 0,24 % fausses alertes) / 76 % au seuil haute-precision. Les ~24 % rates = Groupe 1.
+- **Item 4 explicabilite** [`06d_explain.py`] : SHAP absent (offline) -> dependances partielles.
+  Temp DPF (3242) MONTE (effet marginal 0,27) ; regime 190 effet marginal quasi nul (0,01) = agit par
+  INTERACTIONS. (Bugs corriges en route : grid NaN -> imputation ; method recursion ; cle 'values'.)
+- **Item 6 papier source** : trouve via OSTI -> Lanigan/Daily et al., J. Transportation Security 2025,
+  "Impact of Cyber Threat Awareness on Driver Response". VALIDE notre P5+ (reaction 30/16/7,5 s par
+  groupe ; 100 % d'arret pour Aware+Protocol ; attaque = instrument cluster). docs/01_projet/references.md.
+- **Item 7 audit/tests** : 14 tests (tests/test_data.py, test_features.py) OK = invariants anti-fuite
+  (pas de GPS/survey dans CAN, split conducteur disjoint). Corrige libelle "|corr|>0.5"->0.35 dans
+  02_preprocessing.py. requirements.lock.txt (versions figees).
+
+### Reporte sur un autre PC (machine plus rapide)
+- **Item 2 tuning** [`06b_tuning.py`] : le run n_jobs=-1 avait CRASHE (OOM, 1h25 perdues, 0 resultat).
+  Script DURCI (early_stopping, N_JOBS/N_ITER par env, float32, sauvegarde si interruption). Smoke-test
+  2 candidats OK -> **PR-AUC 0,786 (+0,028 vs defaut 0,757)**. Mais ~150 s/fit ici -> a faire ailleurs.
+- **Item 5 multi-seed** [`06e_multiseed.py`] : pas encore lance.
+- Tout est pret : `REPRISE_AUTRE_PC.md` (quoi copier, commandes, JSON a ramener). Projet portable
+  (aucun chemin absolu), etat propre (aucun process actif).
+
+### Prochaine etape
+- Sur l'autre PC : produire `results_tuning.json` + `results_multiseed.json`, les ramener, finaliser la
+  synthese Vague 1. Puis LIVRABLES (demo, rapport .docx, slides .pptx).

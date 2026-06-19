@@ -27,14 +27,28 @@ Versions figées dans `requirements.lock.txt` pour reproductibilité.
 ## 3. Lancer
 
 ```bash
-# Item 2 — tuning (PR-AUC, GroupKFold conducteur). ~5-15 min selon la machine.
+# Item 2 — tuning (PR-AUC, GroupKFold conducteur). torch NON requis.
 python notebooks/06b_tuning.py
-#   plus rapide / moins de RAM :   N_JOBS=2 N_ITER=15 python notebooks/06b_tuning.py
-#   machine costaude :             N_JOBS=6 N_ITER=40 python notebooks/06b_tuning.py
+#   moins de RAM :        N_JOBS=2 N_ITER=15 python notebooks/06b_tuning.py
+#   machine costaude :    N_JOBS=6 N_ITER=40 python notebooks/06b_tuning.py
 
-# Item 5 — multi-seed MLP + GRU (5 seeds). ~10-15 min (CPU), torch requis.
+# Item 5 — multi-seed MLP + GRU (5 seeds). torch requis.
 python notebooks/06e_multiseed.py
 ```
+
+### Durée à prévoir (réaliste)
+
+Le smoke-test ici a mesuré **~150 s par fit** (1 candidat = 4 fits ≈ 10 min) sur ce Mac.
+Donc le coût total du tuning ≈ **N_ITER × 4 × (temps d'un fit)** :
+- sur ce Mac : N_ITER=25 ≈ **~4 h** (trop) -> c'est pour ça qu'on l'envoie ailleurs ;
+- sur une machine 3-4× plus rapide : N_ITER=20-25 ≈ **30-60 min**.
+
+Choisis **N_ITER** selon la vitesse de ton fit : lance d'abord avec `N_ITER=3` pour
+chronométrer, puis ajuste. Le multi-seed (item 5) est plus court (~10-15 min CPU).
+
+> **Résultat préliminaire déjà obtenu ici** (2 candidats aléatoires) : PR-AUC **0,786**
+> vs défaut **0,757**, soit **+0,028**. Donc le tuning aide un peu — à confirmer sur le
+> run complet.
 
 ## 4. Ce qu'il faut me ramener
 
