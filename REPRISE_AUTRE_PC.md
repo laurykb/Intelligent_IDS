@@ -1,7 +1,13 @@
 # Reprendre les 2 runs lourds de la Vague 1 sur une autre machine
 
-> État au 2026-06-19 : la Vague 1 est faite à **5/7**. Restent **2 runs de calcul** à
-> produire (ils ont été mis en pause pour être lancés sur un PC plus rapide) :
+> [fait] **FAIT le 2026-06-19** (PC Windows + GPU RTX 2060 SUPER). Ce fichier est désormais
+> **historique** ; voir [HANDOFF.md](HANDOFF.md) et [journal.md](journal.md) pour la suite.
+> Résultats : **tuning 0,757 → 0,798 (+0,040)** ; **multi-seed MLP 0,543 vs GRU 0,571 = non
+> significatif**. JSON dans `docs/03_evaluation/results_{tuning,multiseed}.json`. Prochaine
+> étape = **livrables** (démo, rapport .docx, slides .pptx).
+
+> État au 2026-06-19 (avant les runs) : la Vague 1 était faite à **5/7**. Restaient **2 runs de
+> calcul** à produire (mis en pause pour un PC plus rapide) :
 > - **Item 2 — optimisation d'hyperparamètres** : `notebooks/06b_tuning.py`
 >   (le run précédent avait **planté** par manque de mémoire ; le script est maintenant
 >   durci : `early_stopping`, `N_JOBS` modéré, float32).

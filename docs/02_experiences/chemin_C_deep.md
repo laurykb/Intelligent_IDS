@@ -28,6 +28,18 @@ Sequences construites **par conducteur** (ordre `interval_1s`), jamais a cheval.
 
 ![Chemin C](../assets/p4c_deep.png)
 
+> **Note — reproductibilite & non-determinisme GPU (MAJ Vague 1, 2026-06-19).** Les chiffres
+> du tableau ci-dessus sont des runs **mono-graine** calcules sur le **Mac (torch 2.12, CPU)**.
+> La Vague 1 (item 5) a rejoue **5 graines sur GPU** (PC Windows, torch 2.6.0+cu124, RTX 2060
+> SUPER) : **MLP 0,543 ± 0,016** et **GRU 0,571 ± 0,024**, ecart GRU-MLP **non significatif**
+> (cf. [vague1_credibilite.md](vague1_credibilite.md)). Deux consequences a assumer :
+> 1. Les valeurs mono-graine (0,532 / 0,566) **tombent dans les intervalles multi-graines** ->
+>    la conclusion est **stable d'une machine a l'autre**, malgre le changement torch + backend.
+> 2. Sur GPU, les operations CUDA (cuDNN, sommes atomiques du GRU) ne sont **pas deterministes
+>    au bit pres** : on ne revendique donc **pas** un chiffre deep bit-exact, mais une **moyenne
+>    +/- ecart-type sur 5 graines**, plus honnete pour une comparaison. Le verdict ci-dessous
+>    (deep < arbres ; pas d'avantage GRU robuste) ne depend pas de ce non-determinisme.
+
 ## Verdict : le deep ne bat pas les arbres (resultat assume)
 
 Les deux reseaux restent **nettement sous le Gradient Boosting** (0,57 et 0,53 contre

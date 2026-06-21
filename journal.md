@@ -302,3 +302,174 @@
 ### Prochaine etape
 - Sur l'autre PC : produire `results_tuning.json` + `results_multiseed.json`, les ramener, finaliser la
   synthese Vague 1. Puis LIVRABLES (demo, rapport .docx, slides .pptx).
+
+---
+
+## 2026-06-19 - VAGUE 1 BOUCLEE (7/7) sur PC a GPU (les 2 runs lourds)
+
+### Contexte
+- Reprise sur une nouvelle machine (Windows 11, RTX 2060 SUPER 8 Go, 16 coeurs, 34 Go RAM).
+- Environnement reconstruit : venv Python 3.11 + dependances figees (numpy 1.26.4, sklearn 1.2.2,
+  ...) + torch 2.6.0+cu124 (build CUDA). `data/cache.parquet` reconstruit depuis le CSV (sanity
+  check conforme : 155 902 x 817, 50 conducteurs, 337 CAN, attaque 1,46 %).
+- Portabilite : `src/data.py` accepte desormais `IDS_CSV` (chemin du CSV brut sans le dupliquer) ;
+  `06e_multiseed.py` detecte le GPU (`IDS_DEVICE`, sinon CUDA si dispo) au lieu de `DEV="cpu"`.
+
+### Fait
+- **Item 2 tuning** [`06b_tuning.py`, N_JOBS=6 N_ITER=40] : defaut PR-AUC **0,757 ± 0,086** ->
+  optimise **0,798** (**Δ +0,040**, confirme le prelim +0,028). Meilleurs params : arbres peu
+  profonds (max_leaf_nodes=15), learning_rate=0,1, l2=10,0, max_iter=400, min_samples_leaf=20.
+  Ici ~17 s/4-fits (vs ~150 s/fit sur le Mac, ~30x). -> `docs/03_evaluation/results_tuning.json`.
+- **Item 5 multi-seed** [`06e_multiseed.py`, 5 seeds, GPU, ~16 min] : MLP **0,543 ± 0,016** vs
+  GRU **0,571 ± 0,024** ; ecart +0,028 < 2x ecart-type combine (0,029) -> **NON significatif**.
+  -> `docs/03_evaluation/results_multiseed.json`.
+
+### Enseignements
+- Le tuning aide **a la marge** (+0,040) et reste sous l'ecart-type inter-fold (±0,086) : non
+  significatif au sens strict, mais ameliore la moyenne CV. Profil retenu (arbres peu profonds +
+  L2 forte) = oriente generalisation, coherent avec la variance inter-conducteur.
+- L'« avantage » GRU vs MLP de P4-C etait un **artefact de graine**. Les deux deep (0,54-0,57)
+  restent loin des arbres (0,756/0,798) -> verdict arbres = champion CONFIRME.
+
+### Etat
+- Synthese Vague 1 finalisee (7/7) : `docs/02_experiences/vague1_credibilite.md` (tableau + 2
+  nouvelles sections). HANDOFF + REPRISE mis a jour.
+
+### Prochaine etape
+- **LIVRABLES** : demo de detection (scorer une trace + alerte au seuil haute-precision 0,977),
+  rapport .docx, slides .pptx (reutiliser build_report.py / build_slides.py de l'ancien projet).
+
+---
+
+## 2026-06-19 - VAGUE 2 (profondeur methodologique) : 5/5 fait
+
+### Cadrage scope
+- Les 7 etapes litterales du sujet sont remplies des la Vague 1. La Vague 2 = profondeur sur la
+  MEME tache (detecter l'attaque dans le CAN), repond aux failles A1-A5 et borne les limites.
+- Synthese : [`docs/02_experiences/vague2_profondeur.md`].
+
+### Fait
+- **Item 1 - signature d'injection** [`07_injection_signature.py`] : AVANCEE MAJEURE. Le SPN 190
+  existe sur 2 bus ; pendant l'attaque le bus CAN0 SE TAIT (~4 s apres l'onset, marche d'escalier,
+  couverture 67%->6,7%, tous groupes) alors que le principal reste a 100%. = signature de
+  l'INJECTION (l'ELD brouille CAN0), independante de la reaction -> reponse concrete a A1. Detecteur
+  par-vehicule PR-AUC 0,53/0,74(G2)/0,71(G3). CORRIGE verification_dataset.md (injection presente en
+  MISSINGNESS, pas en valeur). Limite : ne sauve pas le G1 (CAN0 quasi pas logue).
+- **Item 2 - evasion** [`08_evasion.py`] : la feature n0 1 est le signal CAN0 (= la signature
+  d'injection, deja exploitee par le champion). Attaquant white-box : neutraliser 1 signal -> PR-AUC
+  0,74->0,22 ; 2 signaux -> 0,07. Detecteur FRAGILE (importance ultra-concentree).
+- **Item 3 - biometrie/awareness** [`09_biometric_fusion.py`] : negatif assume. BIO seule ~hasard ;
+  fusion -0,02 sur G1 (le cas dur), +0,04 sur G2 (dans le bruit). Biometrie = axe d'analyse, pas de
+  modelisation.
+- **Item 4 - clustering/RBF/semi-sup/hybride** [`10_clustering_hybrid.py`] : SVM-RBF 0,212 (< arbres),
+  clustering ARI 0,001 (n'isole pas l'attaque), self-training sans gain (25% des labels = 100%),
+  hybride 0,645 < champion 0,695 (le supervise absorbe deja l'injection -> pas de free lunch).
+  [BUG corrige : basev iterait `for d in drv` (O(n^2)) -> precalcul par conducteur unique.]
+- **Item 5 - taxonomie/injections synthetiques** [`11_threat_taxonomy.py`] : detecteur MONO-ATTAQUE.
+  Seuil @1% : attaque reelle 65%, mais fuzzing 0,7% / masquerade 0,9% / replay 1,1% (non detectes ;
+  DoS/silence 15%). Perimetre valide = l'attaque ELD du dataset, pas "les intrusions CAN".
+
+### Enseignements
+- Acquis : reponse concrete a A1 (signature d'injection isolee) + carte honnete des limites
+  (fragile a l'adversaire, mono-attaque, biometrie inutile, pas de gain hybride). Les negatifs
+  renforcent la credibilite et cadrent la portee du livrable.
+
+### Prochaine etape
+- **Vague 3 reléguée hors-scope** (autres datasets / RAG / deploiement, en partie infaisable
+  hors-ligne) -> section "Limites & perspectives" du rapport, non implementee.
+- **LIVRABLES** (demo, rapport .docx, slides .pptx).
+
+---
+
+## 2026-06-19 - Auto-critique v2 (B3/B4 in-scope) + LIVRABLE : demo interactive Streamlit
+
+### Scope autocritique_v2
+- Classe B1-B13 : la plupart deja traites (V1/V2) ; seuls **B3** (caracteriser l'attaque) et
+  **B4** (faisabilite) restaient IN-SCOPE -> faits. B5/B7/B8/B11/B13 = sections de DISCUSSION
+  (ethique, deploiement, cout operationnel) -> integrees dans la demo/le rapport, pas codees.
+
+### Fait - B3/B4 [`12_attack_characterization.py`]
+- **B3** : empreinte de l'attaque a l'onset (51 episodes). Deux signatures SIMULTANEES a +4 s :
+  (1) DISPONIBILITE -> seul le bus CAN0 (190) se tait (-0,72, le reste plat) = l'injection ;
+  (2) VALEUR -> grappe de signaux moteur chute (EGR, carburant, couple, freinage, z~-1,5) = la
+  reaction (le vehicule decelere). Confirme signal par signal la dichotomie A1.
+- **B4** : champion = 695 Ko, inference 2,25 ms/fenetre (562k/s) -> trivial a deployer ; goulot =
+  l'agregation 1 s (perd la signature sous-seconde), pas le calcul.
+- Writeup : `docs/02_experiences/v2_attack_characterization.md`.
+
+### Fait - DEMO interactive (livrable central) [`deliverables/`]
+- Choix techno : **Streamlit** (tout est en Python). App `deliverables/app.py` (9 pages, Plotly) :
+  projet -> dataset/EDA -> pieges/confondeurs -> comparaison modeles -> evaluation (ROC/PR + seuil
+  interactif) -> **signature d'injection** -> robustesse/limites -> **detection en direct** (choisir
+  un conducteur + seuil, voir alertes/latence/faux positifs sur de vraies traces hors-fold) ->
+  ethique/deploiement.
+- Donnees : `build_demo_data.py` -> `demo_data.json` (291 Ko, vraies valeurs : oof_scores.npz +
+  result JSON + traces des 50 conducteurs). App rapide/portable (ne depend plus du CSV/cache).
+- Valide : les 9 pages + widgets interactifs passent via `streamlit.testing.v1.AppTest`.
+- Lancer : `streamlit run deliverables/app.py`. Mode d'emploi : `deliverables/README.md`.
+
+### Prochaine etape
+- Livrables restants : **rapport .docx** + **slides .pptx** (reutiliser build_report.py /
+  build_slides.py de l'ancien projet python-docx/pptx). Le contenu existe deja (docs/, JSON, figures).
+
+---
+
+## 2026-06-19 - LIVRABLES complets (inspires de l'ancien projet, adaptes dans le scope)
+
+### Contexte
+- L'utilisateur a fourni l'ANCIEN projet (`C:/Users/laury/Desktop/ids_old`, autre dataset, termine)
+  comme reference de qualite/format pour l'UI et les livrables. Consigne : s'en inspirer pour
+  corriger/adapter, en restant dans le scope du sujet (donc PAS la vue RAG/agent = Vague 3 hors-scope).
+
+### Fait
+- **App Streamlit enrichie** [`deliverables/app.py`, 11 pages] : ajout de la **detection animee**
+  (play/pause, vitesse, auto-advance via st.rerun), de la page **"Vous pilotez l'attaquant"**
+  (evasion LIVE : l'utilisateur neutralise k signaux, le VRAI modele re-score, le rappel
+  s'effondre - c'est l'item V2-2 rendu interactif), et de la **base-rate fallacy** interactive.
+  Validee : les 11 pages rendent sans exception (streamlit.testing AppTest).
+- **Artefacts pour l'inference live** [`artifacts/build_artifacts.py`] : `ids_model.joblib`
+  (champion tune, 672 Ko), `ids_model_meta.json`, `demo_samples.npz` (echantillons attaque/normal
+  du test + medianes normales + ranking d'importance pour l'evasion).
+- **Rapport .docx** [`build_report.py` -> `deliverables/Rapport_IDS_Intelligent.docx`] : 15
+  chapitres, adapte du generateur de l'ancien projet (helpers callout/table/figure/code/TOC),
+  contenu ORNL (confondeurs, champion, signature d'injection, robustesse), SANS le chapitre
+  RAG/attention. ~218 paragraphes, figures docs/assets/*.
+- **Slides .pptx** [`build_slides.py` -> `deliverables/Presentation_IDS_Intelligent.pptx`] : 25
+  diapos (design cards/circles/stats), meme parcours, sans la slide RAG.
+
+### Decisions de scope
+- Repris : detection animee, attaquant adaptatif live, base-rate fallacy (tous dans le scope).
+- ECARTE (hors-scope, Vague 3) : la vue "Analyste IA (RAG)" et le chapitre attention/Transformer
+  de l'ancien projet.
+
+### Etat
+- 3 livrables prets dans `deliverables/`. Tout le projet (Vagues 1+2, auto-critiques traitees,
+  livrables) est complet et dans le scope. Reste : decision de commit (toujours non committe).
+
+---
+
+## 2026-06-21 - Nettoyage traces d'IA + auto-evaluation + consolidation livrables
+
+### Comparaison a l'ancien projet (ids_old)
+- Rigueur : la notre est au moins egale (anti-confondeurs, repro, signature d'injection). Manque
+  vs l'ancien : un socle theorique autonome (docs/00_theorie) + une narration plus lineaire.
+
+### Nettoyage des traces d'IA
+- Emojis dans le CODE : uniquement `deliverables/app.py` (34) -> tous retires, style sobre comme
+  l'ancien projet. Notebooks/src/build_*/artifacts etaient deja propres. 11 pages re-testees OK.
+- Docs : 23 emojis de statut (cases vertes/horloges) -> tokens texte [fait]/[partiel]/[hors-cible].
+- NB : [OK], ===, -> ne sont PAS des traces (presents aussi dans l'ancien projet propre).
+
+### Auto-evaluation (perspective Khatoun)
+- `docs/04_conclusion/evaluation_jury.md` : note indicative 17/20 (detail par critere). Forts :
+  reflexe anti-confondeurs, decouverte CAN0, honnetete, demo vivante. Faibles : generalisation non
+  prouvee (un dataset/une attaque), detecteur evadable, cible conflee, pas de SOTA chiffre.
+
+### Auto-amelioration in-scope + consolidation
+- Cree `docs/00_theorie/fondements.md` (socle ML/metriques/base-rate/fuite, le manque vs l'ancien).
+- Rapport : ajout d'une section **12.3 Positionnement SOTA** (CIDS/CANet/ROAD/J1939) et **13.3
+  Perspectives** (mappe les critiques jury : ROAD, defense en profondeur, haute-resolution,
+  taxonomie). Renvoi au socle theorique et a l'auto-evaluation. 227 paragraphes.
+- Slides : ajout d'une diapo **Positionnement & perspectives** (26 diapos).
+- Gene : le .docx canonique etait OUVERT dans Word -> rapport consolide ecrit dans
+  `Rapport_IDS_Intelligent_consolide.docx` (a renommer une fois Word ferme). Slides OK (canonique).

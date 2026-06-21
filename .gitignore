@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .DS_Store
+.venv/
 data/cache.parquet
 # Le CSV brut (852 Mo) : a ne pas versionner tel quel.
 data/DriverID_Full_Data_Downsampled.csv

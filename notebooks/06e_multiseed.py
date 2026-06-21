@@ -19,7 +19,13 @@ from data import load
 from features import feature_sets
 
 torch.set_num_threads(max(1, os.cpu_count() // 2))
-DEV = "cpu"
+# GPU si dispo (surchargeable : IDS_DEVICE=cpu). Sur cette machine = CUDA (RTX 2060).
+DEV = os.environ.get("IDS_DEVICE") or ("cuda" if torch.cuda.is_available() else "cpu")
+if DEV == "cuda":
+    torch.backends.cudnn.benchmark = True
+    print(f"[device] {torch.cuda.get_device_name(0)} (CUDA)\n")
+else:
+    print(f"[device] {DEV}\n")
 SEEDS = [0, 1, 2, 3, 4]
 EPOCHS, BATCH = 30, 1024
 L, GRU_EPOCHS, GBATCH, NEG_CAP = 16, 8, 512, 40000

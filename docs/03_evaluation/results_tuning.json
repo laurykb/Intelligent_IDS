@@ -1,0 +1,17 @@
+{
+  "default_prauc": [
+    0.757477747009266,
+    0.08567312825294822
+  ],
+  "tuned_prauc": 0.797596216253308,
+  "delta": 0.040118469244042054,
+  "best_params": {
+    "min_samples_leaf": 20,
+    "max_leaf_nodes": 15,
+    "max_iter": 400,
+    "max_depth": "None",
+    "learning_rate": 0.1,
+    "l2_regularization": 10.0
+  },
+  "n_iter": 40
+}

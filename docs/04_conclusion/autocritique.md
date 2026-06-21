@@ -16,11 +16,15 @@ Le sujet (R. Khatoun) liste des étapes précises. On les confronte à ce qu'on 
 | Comparer arbres / SVM / réseaux de neurones | **fait** | LogReg, SVM-lin, RF, GradBoosting, MLP, GRU |
 | Diviser train / test | **fait (et durci)** | split **par conducteur** (anti-fuite) |
 | Entraîner sur normal + malveillant | **fait** | chemin A |
-| Évaluer : précision, rappel, **courbe ROC** | **partiel** | precision/recall/PR-AUC oui, **ROC manquante** |
-| **Optimiser les hyperparamètres** | **NON FAIT** | champion = HistGB par défaut |
+| Évaluer : précision, rappel, **courbe ROC** | **fait** (Vague 1) | PR-AUC + **AUC-ROC 0,977** (item 1) |
+| **Optimiser les hyperparamètres** | **fait** (Vague 1) | tuning **0,757 → 0,798** (+0,040, item 2) |
 
--> Deux demandes **littérales** du sujet restent ouvertes : la **courbe ROC** et
-l'**optimisation des hyperparamètres**. Ce sont les premières choses à combler (Vague 1).
+-> **[MAJ post-Vague 1 — 2026-06-19]** À l'écriture de cette critique, deux demandes
+**littérales** du sujet restaient ouvertes (courbe ROC, optimisation des hyperparamètres).
+Elles ont depuis été **comblées** par la Vague 1 (items 1 et 2 ; cf.
+[vague1_credibilite.md](../02_experiences/vague1_credibilite.md)). **Les 7 étapes du sujet
+sont désormais remplies.** Le reste de cette auto-critique (failles A1-A6) garde sa valeur
+de diagnostic ; les statuts ci-dessous sont annotés en conséquence.
 
 ## Ce qu'on a bien fait (pour situer la critique)
 
@@ -58,7 +62,9 @@ Mais il reste beaucoup de trous.
   ou brute, où la signature d'injection sous-seconde pourrait survivre.
 
 ### A2. Évaluation incomplète pour un IDS (et vs le sujet)
-> **Statut :** **à faire** -> *Vague 1*.
+> **Statut :** **FAIT (Vague 1)** — ROC, latence + métriques par épisode, hyperparamètres et
+> multi-seed sont tous traités. Voir [vague1_credibilite.md](../02_experiences/vague1_credibilite.md).
+> Le constat ci-dessous décrit l'état *avant* la Vague 1.
 
 - **Courbe ROC absente** : le sujet la demande ; on n'a que PR (justifié par la rareté,
   mais ROC + AUC-ROC à ajouter, en expliquant pourquoi PR-AUC reste la métrique primaire).
@@ -102,7 +108,10 @@ Mais il reste beaucoup de trous.
   qu'on a traitée en note de bas de page au lieu d'en faire un axe.
 
 ### A6. Reproductibilité / rigueur
-> **Statut :** **à faire** -> *Vague 1*.
+> **Statut :** **FAIT (Vague 1)** — hyperparamètres réglés, deep multi-seed (IC), audit de
+> l'exclusion GPS, tests unitaires et lock de versions. Voir
+> [vague1_credibilite.md](../02_experiences/vague1_credibilite.md). Constat *avant* Vague 1
+> ci-dessous. *(Nuance machine : cf. note d'environnement de calcul — runs lourds faits sur PC GPU.)*
 
 - Champion = **hyperparams par défaut** -> « champion » non garanti optimal.
 - Deep **mono-seed**, pas d'intervalles de confiance.

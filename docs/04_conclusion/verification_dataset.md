@@ -8,28 +8,28 @@
 
 | Notre hypothèse | Documentation officielle | Verdict |
 |---|---|---|
-| VBOX = GPS/inertie = **confondeur de lieu** à exclure | VBOX 3i = data logger **GPS + inertie** (vitesse, accel, position, heading) | ✅ exact |
-| Biométrie = HR/EDA/IBI | **Empatica E4** (cardio + électrodermie) | ✅ exact |
-| CAN = signaux **SAE J1939** (préfixe SPN numérique) | CANbus **SAE J1939** via CANLogger3 / TruckCape | ✅ exact |
-| Groupes = niveaux d'**awareness** | G1 (17) rien su / G2 (16) prévenu / G3 (17) prévenu+se garer | ✅ **exact** |
-| Attaque au **lieu/moment fixe** | attaque au « turn around point », Laporte Ave (survey) ; s'arrête à 1 min OU si on se gare | ✅ cohérent |
-| Agrégation **1 s par moyenne** (+ sd/min/max) | downsampling 1 s par moyenne, sd/min/max pour montrer la perte | ✅ exact |
+| VBOX = GPS/inertie = **confondeur de lieu** à exclure | VBOX 3i = data logger **GPS + inertie** (vitesse, accel, position, heading) | [fait] exact |
+| Biométrie = HR/EDA/IBI | **Empatica E4** (cardio + électrodermie) | [fait] exact |
+| CAN = signaux **SAE J1939** (préfixe SPN numérique) | CANbus **SAE J1939** via CANLogger3 / TruckCape | [fait] exact |
+| Groupes = niveaux d'**awareness** | G1 (17) rien su / G2 (16) prévenu / G3 (17) prévenu+se garer | [fait] **exact** |
+| Attaque au **lieu/moment fixe** | attaque au « turn around point », Laporte Ave (survey) ; s'arrête à 1 min OU si on se gare | [fait] cohérent |
+| Agrégation **1 s par moyenne** (+ sd/min/max) | downsampling 1 s par moyenne, sd/min/max pour montrer la perte | [fait] exact |
 
 **Audit de la classification des colonnes** (`classify_columns`) :
 - Bucket **CAN** (337) : 100 % de SPN J1939 (moteur, carburant, températures, freins,
   couple…). **Aucune** colonne GPS/position/heading ne fuite dedans (vérifié).
 - Bucket **VBOX** (312, exclu) : ADC, IMU, Pos_X/Y/Z, PreKF_Latitude/Longitude, accel,
-  jerk, pitch… = bien du GPS/inertie. ✅
-- Bucket **BIO** (7) : EDA/HR/IBI. ✅
+  jerk, pitch… = bien du GPS/inertie. [fait]
+- Bucket **BIO** (7) : EDA/HR/IBI. [fait]
 - Bucket **META** (exclu) : IDs, temps, `cyberattack_active`, `cumulative_distance_meters`
   (haversine GPS), **et toutes les colonnes Qualtrics** (MMDBQ, GRiPS, démographie).
-  -> aucune fuite de survey/lieu dans les features. ✅
+  -> aucune fuite de survey/lieu dans les features. [fait]
 
 **Confondeurs de progression INTRA-CAN** (déjà gérés) : le bucket CAN contient
 légitimement des signaux de mouvement (SPN 84 vitesse roue, 244/245/918 distance,
 905-908 vitesses relatives roues). Ils sont corrélés à la position sur le trajet, mais
 le test **CAN_STABLE** (P2/P3) avait montré que les exclure ne change rien (0,630 vs
-0,632) -> le modèle n'en dépend pas. ✅ Pas de bêtise.
+0,632) -> le modèle n'en dépend pas. [fait] Pas de bêtise.
 
 ## 2. CE QU'ON A CORRIGÉ
 
@@ -73,6 +73,17 @@ contexte routier** de la fenêtre d'attaque — ce qui **confirme et durcit** la
 P5+ (« on détecte la réaction, pas l'injection »), mais invalide l'idée d'un cœur de
 détection « spoofing ». La phrase fautive est corrigée dans
 [p5_evaluation.md](../02_experiences/p5_evaluation.md).
+
+> **[Nuance Vague 2 — 2026-06-19] Le constat ci-dessus regardait les VALEURS ; il faut le
+> compléter par la DISPONIBILITÉ.** L'analyse inter-bus du SPN 190
+> ([v2_injection_signature.md](../02_experiences/v2_injection_signature.md)) montre que
+> l'injection **EST présente** dans les features — non comme un régime à 0, mais comme le
+> **silence du bus CAN0** : pendant l'attaque, la couverture CAN0 chute de 67 % à 6,7 %
+> (~4 s après l'onset, marche d'escalier), tous groupes confondus. Donc l'injection laisse
+> bien une trace exploitable (la *missingness* du canal), distincte de la réaction. « Absent
+> en valeur » oui, mais « **présent en disponibilité** ». Cela **nuance A1** (une partie de
+> l'injection est isolable) sans l'annuler (le Groupe 1, dont CAN0 n'est quasi pas logué,
+> reste un angle mort).
 
 ## 3. Impact sur les conclusions
 

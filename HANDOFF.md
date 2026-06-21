@@ -37,6 +37,10 @@ L'attaque survient TOUJOURS au meme **lieu** (apres North Overland Trail) et a u
 - **Fuite par le conducteur** : un split aleatoire donne 0,985 (trompeur) vs 0,632
   par conducteur. -> **TOUJOURS splitter PAR CONDUCTEUR** (GroupKFold / driver_holdout).
 - Attaque rare (1,46 %) -> **metrique = PR-AUC**, jamais l'accuracy.
+- **[Vague 2] La signature d'injection EXISTE** : le bus CAN0 (SPN 190) se tait ~4 s apres
+  l'onset (couverture 67%->6,7%, tous groupes) = effet direct de l'injection, distinct de la
+  reaction. C'est meme la feature n0 1 du champion. Nuance la conclusion "injection absente" de
+  verification_dataset.md (absente en VALEUR, presente en MISSINGNESS). Cf. vague2_profondeur.md.
 
 ## 3. Etat d'avancement
 
@@ -52,9 +56,11 @@ L'attaque survient TOUJOURS au meme **lieu** (apres North Overland Trail) et a u
 | **P5+ Fragilite Groupe 1** | **fait** | **gradient d'awareness** : detectabilite G1<G2<G3 ; l'IDS detecte la **REACTION du conducteur** (G3 se gare->regime chute d=-0,48), faible sur le non-averti (G1 intra 0,46). Robuste au bruit (graduel) |
 | **Auto-critique** | **fait** | `docs/04_conclusion/autocritique.md` + `_v2.md` (calquees sur le projet precedent) ; 2 demandes du sujet non faites = **ROC** + **tuning hyperparams** |
 | **Verification dataset** | **fait** | `docs/04_conclusion/verification_dataset.md` : classification colonnes OK (aucune fuite) ; 2 corrections : **G1S04** CAN bas debit (gradient survit) + **spoof tach->0 ABSENT des features** (on detecte la reaction, pas l'injection) |
-| **Vague 1 (credibilite/sujet)** | **5/7 fait** | ROC **AUC 0,977** vs PR 0,735 ; **86 % d'episodes detectes en ~4 s** ; PDP (temp DPF monte, regime 190 par interactions) ; papier source ORNL valide le gradient d'awareness ; **14 tests OK** + lock versions. RESTE 2 runs lourds -> autre PC |
-| Vague 1 : 2 runs restants | A FAIRE (autre PC) | **tuning** (`06b_tuning.py`, prelim +0,028) + **multi-seed** (`06e_multiseed.py`). Voir `REPRISE_AUTRE_PC.md` |
-| Livrables | A FAIRE | demo de detection, rapport .docx, slides .pptx (reutiliser build_report.py / build_slides.py) |
+| **Vague 1 (credibilite/sujet)** | **7/7 FAIT** | ROC **AUC 0,977** vs PR 0,735 ; **86 % d'episodes detectes en ~4 s** ; PDP (temp DPF monte, regime 190 par interactions) ; papier source ORNL valide le gradient d'awareness ; **14 tests OK** + lock versions ; **tuning 0,757->0,798 (+0,040)** ; **multi-seed MLP 0,543 vs GRU 0,571 = non significatif** (2 runs lourds boucles sur PC GPU le 2026-06-19) |
+| **Vague 2 (profondeur)** | **5/5 FAIT** | **signature d'injection isolee** (silence bus CAN0 ~4s apres onset = injection, indep. reaction -> reponse a A1) ; evasion **fragile** (1-2 signaux suffisent) ; biometrie **inutile** (meme par groupe) ; clustering/RBF/semi-sup/hybride = **rien ne bat les arbres** ; **mono-attaque** (fuzzing/masquerade/replay non detectes). Synthese : `docs/02_experiences/vague2_profondeur.md` |
+| Vague 3 (generalisation) | RELEGUEE hors-scope | autres datasets/RAG/deploiement, en partie infaisable hors-ligne -> section "Limites & perspectives" du rapport, NON implementee (decision de scope) |
+| **Livrables : DEMO** | **FAIT (enrichie)** | **app Streamlit** `deliverables/app.py` (11 pages) : parcours complet + **detection animee** (play/pause) + **attaquant pilote en LIVE** (evasion sur le vrai modele `artifacts/ids_model.joblib`) + **base-rate fallacy**. Inspiree de l'ancien projet, dans le scope (PAS de vue RAG). Lancer : `streamlit run deliverables/app.py`. Cf. `deliverables/README.md` |
+| **Livrables : rapport + slides** | **FAIT** | `build_report.py` -> `deliverables/Rapport_IDS_Intelligent.docx` (15 chapitres) ; `build_slides.py` -> `deliverables/Presentation_IDS_Intelligent.pptx` (25 diapos). Adaptes des generateurs python-docx/pptx de l'ancien projet, sans le chapitre RAG/attention (hors-scope) |
 
 ## 4. Briques de code (reutilisables)
 
@@ -105,24 +111,29 @@ Auto-critique ecrite (`docs/04_conclusion/autocritique.md` + `_v2.md`). Elle poi
 trous DANS LE SCOPE DU SUJET : **courbe ROC** et **optimisation d'hyperparametres** (non
 faits). Faille la plus grave (A1) : la cible melange injection + reaction conducteur.
 
-### >>> REPRISE SUR UN AUTRE PC (lire d'abord `REPRISE_AUTRE_PC.md`)
+### >>> VAGUE 1 BOUCLEE (7/7) — les 2 runs lourds sont faits (PC GPU, 2026-06-19)
 
-La Vague 1 est faite a **5/7**. Synthese : [`docs/02_experiences/vague1_credibilite.md`].
-Il reste **2 runs de calcul lourds**, volontairement reportes sur une machine plus rapide :
-1. **Item 2 tuning** : `python notebooks/06b_tuning.py` -> `docs/03_evaluation/results_tuning.json`
-   (script DURCI : early_stopping, `N_JOBS`/`N_ITER` par env, float32 ; le run -1 avait crashe en OOM).
-   Prelim ici : **+0,028** vs defaut 0,757. Compter ~150 s/fit sur ce Mac (donc ailleurs).
-2. **Item 5 multi-seed** : `python notebooks/06e_multiseed.py` -> `results_multiseed.json` (torch requis).
+Synthese : [`docs/02_experiences/vague1_credibilite.md`]. Resultats finaux :
+1. **Item 2 tuning** -> `docs/03_evaluation/results_tuning.json` : defaut **0,757** -> optimise
+   **0,798** (**+0,040**). Params : max_leaf_nodes=15, learning_rate=0,1, l2=10,0, max_iter=400.
+2. **Item 5 multi-seed** -> `results_multiseed.json` : MLP **0,543 ± 0,016** vs GRU **0,571 ± 0,024**,
+   ecart **non significatif** (artefact de graine ; arbres restent champions).
 
-A copier sur l'autre PC : tout `IDS_ORNL/` + `data/cache.parquet` (344 Mo) ; `pip install -r
-requirements.lock.txt`. Ramener les 2 JSON dans `docs/03_evaluation/`. Projet **portable**
-(aucun chemin absolu code en dur, verifie).
+**Environnement de CE PC (Windows + GPU)** : venv `.venv/` (Python 3.11) ; lancer via
+`.venv/Scripts/python.exe`. torch **2.6.0+cu124** (CUDA, RTX 2060 SUPER). `data/cache.parquet`
+reconstruit (gitignored). Le CSV brut est hors-repo -> loader surchargeable par `IDS_CSV`
+(cf. `src/data.py`). `06e_multiseed.py` auto-detecte le GPU (`IDS_DEVICE` pour forcer cpu).
+Provenance des chiffres + **preuve de repro cross-plateforme** (champion identique Mac/Windows) :
+`docs/04_conclusion/environnement_calcul.md` ; lock GPU exact : `requirements-gpu.lock.txt`.
 
-Une fois les 2 JSON ramenes : finaliser le tableau de `vague1_credibilite.md` + journal, puis
-**LIVRABLES** (demo seuil 0,977 ; rapport .docx ; slides .pptx) en reutilisant `build_report.py`
-/ `build_slides.py` de l'ancien projet (`/Users/laury/Downloads/doi_10_5061_dryad_zw3r228jk__v20250315`).
-Materiel pret : figures docs/assets/* (dont v1_*), JSON docs/03_evaluation/results_*.json,
-writeups docs/02_experiences/, conclusions docs/04_conclusion/, references docs/01_projet/references.md.
+### >>> PROCHAINE ETAPE : LIVRABLES
+
+Produire : **demo de detection** (scorer une trace + alerte au seuil haute-precision 0,977) ;
+**rapport .docx** ; **slides .pptx** — en reutilisant `build_report.py` / `build_slides.py` de
+l'ancien projet (python-docx/python-pptx). Materiel pret : figures docs/assets/* (dont v1_*),
+JSON docs/03_evaluation/results_*.json, writeups docs/02_experiences/, conclusions
+docs/04_conclusion/, references docs/01_projet/references.md.
 
 Pour reprendre : lire ce fichier, puis `journal.md` et `docs/01_projet/`, puis
-`python3 src/data.py` pour verifier l'environnement.
+`.venv/Scripts/python.exe src/data.py` pour verifier l'environnement (au besoin
+`IDS_CSV=<chemin du CSV> .venv/Scripts/python.exe src/data.py` si le cache est absent).

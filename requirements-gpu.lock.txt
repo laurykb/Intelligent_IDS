@@ -1,0 +1,13 @@
+# Environnement EXACT de ce PC (Windows 11, NVIDIA RTX 2060 SUPER 8 Go, driver CUDA 13.2,
+# Python 3.11.9). Reproduit les 2 runs lourds de la Vague 1 : tuning (item 2) + multi-seed (item 5).
+# Stack scientifique identique au lock principal ; seul torch change (build CUDA au lieu de CPU).
+numpy==1.26.4
+pandas==2.1.4
+scikit-learn==1.2.2
+scipy==1.11.4
+matplotlib==3.8.0
+pyarrow==14.0.2
+
+# torch build CUDA 12.4 (l'index cu124 fonctionne avec un driver CUDA >= 12.4, ici 13.2) :
+#   pip install torch --index-url https://download.pytorch.org/whl/cu124
+torch==2.6.0+cu124

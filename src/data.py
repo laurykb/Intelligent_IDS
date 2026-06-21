@@ -15,7 +15,10 @@ import os
 import pandas as pd
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSV = os.path.join(ROOT, "data", "DriverID_Full_Data_Downsampled.csv")
+# CSV brut : par defaut dans data/, mais surchargeable via la variable d'env
+# IDS_CSV (utile quand le CSV de 852 Mo reste dans son dossier d'origine et
+# qu'on ne veut pas le dupliquer). Le cache parquet, lui, est toujours dans data/.
+CSV = os.environ.get("IDS_CSV", os.path.join(ROOT, "data", "DriverID_Full_Data_Downsampled.csv"))
 CACHE = os.path.join(ROOT, "data", "cache.parquet")
 
 META = ["ID", "Group", "Subject", "Time", "interval_1s", "cyberattack_active",

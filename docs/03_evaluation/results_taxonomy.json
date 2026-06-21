@@ -1,0 +1,11 @@
+{
+  "threshold_quantile": 0.99,
+  "false_alert_rate": 0.010016182132693488,
+  "detection_rates": {
+    "attaque_REELLE (ref)": 0.651252408477842,
+    "DoS_silence_bus": 0.15325,
+    "Fuzzing_20pct": 0.007,
+    "Masquerade_furtif_190": 0.0095,
+    "Replay_autre_fenetre": 0.0105
+  }
+}

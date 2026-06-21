@@ -1,0 +1,82 @@
+{
+  "fingerprint_dispo": [
+    [
+      "min.190.Engine.Speed.CAN0",
+      -0.7170868347338936
+    ],
+    [
+      "max.190.Engine.Speed.CAN0",
+      -0.7170868347338936
+    ],
+    [
+      "sd.190.Engine.Speed.CAN0",
+      -0.7170868347338936
+    ],
+    [
+      "mean.190.Engine.Speed.CAN0",
+      -0.7170868347338936
+    ],
+    [
+      "mean.3030.Transmission.Torque.Converter.Ratio",
+      -0.02969187675070028
+    ],
+    [
+      "min.3030.Transmission.Torque.Converter.Ratio",
+      -0.02969187675070028
+    ],
+    [
+      "max.3030.Transmission.Torque.Converter.Ratio",
+      -0.02969187675070028
+    ],
+    [
+      "sd.3030.Transmission.Torque.Converter.Ratio",
+      -0.025490196078431372
+    ]
+  ],
+  "fingerprint_valeur": [
+    [
+      "min.2659.Engine.Exhaust.Gas.Recirculation.1.Mass.Flow.Rate",
+      -1.584274320339178
+    ],
+    [
+      "mean.2659.Engine.Exhaust.Gas.Recirculation.1.Mass.Flow.Rate",
+      -1.575752828813423
+    ],
+    [
+      "min.1242.Instantaneous.Estimated.Brake.Power",
+      -1.4997485855300738
+    ],
+    [
+      "max.2659.Engine.Exhaust.Gas.Recirculation.1.Mass.Flow.Rate",
+      -1.4818724440460895
+    ],
+    [
+      "min.183.Engine.Fuel.Rate",
+      -1.479372803076257
+    ],
+    [
+      "min.2432.Engine.Demand...Percent.Torque",
+      -1.4750566202218085
+    ],
+    [
+      "min.513.Actual.Engine...Percent.Torque",
+      -1.4530329546871021
+    ],
+    [
+      "mean.27.Engine.Exhaust.Gas.Recirculation.1.Valve.Position",
+      -1.4296169014337334
+    ],
+    [
+      "mean.1242.Instantaneous.Estimated.Brake.Power",
+      -1.428798420666638
+    ],
+    [
+      "min.92.Engine.Percent.Load.At.Current.Speed",
+      -1.428231004916489
+    ]
+  ],
+  "model_size_kb": 695.453125,
+  "latency_ms_per_window": 2.25402569770813,
+  "throughput_windows_per_s": 562344.6759445473,
+  "n_onsets": 51
+}

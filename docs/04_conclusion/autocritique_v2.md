@@ -16,6 +16,16 @@ est en soi une critique.
 
 ## B. Les angles non couverts (nouveaux)
 
+> **[MAJ 2026-06-19 — état après Vagues 1/2]** : **B1** (injection vs réaction) → isolé via la
+> signature CAN0 ([v2_injection_signature.md](../02_experiences/v2_injection_signature.md)) ;
+> **B2** → [v2_taxonomy.md](../02_experiences/v2_taxonomy.md) ; **B3** (caractérisation fine) +
+> **B4** (latence 2 ms / 695 Ko) → [v2_attack_characterization.md](../02_experiences/v2_attack_characterization.md) ;
+> **B6** rigueur stat → Vague 1 ; **B7** papier ORNL → V1-6 ; **B9** clustering/semi-sup →
+> [v2_hybrid.md](../02_experiences/v2_hybrid.md) ; **B12** biométrie →
+> [v2_biofusion.md](../02_experiences/v2_biofusion.md). **Restent des sections de DISCUSSION
+> (non codées, à mettre dans le rapport/la démo)** : B5 poisoning, B7 table SOTA, B8 gestion de
+> projet, B11 éthique/dual-use/RGPD, B13 coût opérationnel.
+
 ### B1. Cible conflée (injection + réaction) — la limite de validité fondamentale
 Toutes nos conclusions reposent sur une cible (`cyberattack_active`) qui **mélange
 l'injection CAN et la réaction du conducteur**. On ne peut pas, en l'état, prouver qu'on

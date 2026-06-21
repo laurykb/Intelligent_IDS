@@ -1,0 +1,17 @@
+{
+  "features_n": 337,
+  "best_params": {
+    "learning_rate": 0.1,
+    "max_leaf_nodes": 15,
+    "max_iter": 400,
+    "max_depth": null,
+    "min_samples_leaf": 20,
+    "l2_regularization": 10.0
+  },
+  "metrics_test": {
+    "pr_auc": 0.690405081027961,
+    "roc_auc": 0.9800415794045348,
+    "precision@0.5": 0.3220883534136546,
+    "recall@0.5": 0.7726396917148363
+  }
+}

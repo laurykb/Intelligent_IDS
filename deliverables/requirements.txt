@@ -1,0 +1,7 @@
+# Dépendances des livrables (en plus du stack du projet).
+streamlit==1.58.0
+plotly==6.8.0
+joblib
+python-docx==1.2.0
+python-pptx
+pillow

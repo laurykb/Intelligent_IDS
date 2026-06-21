@@ -1,7 +1,17 @@
+# Versions figees pour la reproductibilite.
+# Le stack scientifique ci-dessous est IDENTIQUE sur toutes les machines du projet
+# (verifie : meme PR-AUC du champion sur Mac et sur le PC GPU, cf.
+#  docs/04_conclusion/environnement_calcul.md).
 numpy==1.26.4
 pandas==2.1.4
 scikit-learn==1.2.2
 scipy==1.11.4
 matplotlib==3.8.0
 pyarrow==14.0.2
-torch==2.12.1
+
+# --- torch : SPECIFIQUE A LA MACHINE (CPU vs GPU) -> ne pas melanger ---
+# Mac (origine ; P0-P5+, deep mono-seed P4-C)            : torch==2.12.1       (CPU)
+# PC Windows + GPU (Vague 1 : tuning + multi-seed)       : torch==2.6.0+cu124  (CUDA 12.4)
+#   -> sur ce PC : pip install torch --index-url https://download.pytorch.org/whl/cu124
+#   -> lock GPU exact de ce PC : requirements-gpu.lock.txt
+# Provenance detaillee des chiffres : docs/04_conclusion/environnement_calcul.md

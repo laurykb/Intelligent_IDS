@@ -1,0 +1,42 @@
+{
+  "svm_rbf_prauc": 0.21245462241385848,
+  "kmeans_prauc_via_cluster_rate": 0.03790203305985154,
+  "kmeans_ari_vs_attack": 0.000999452225807807,
+  "kmeans_ari_vs_driver": 0.054777295130252805,
+  "gmm_prauc_via_cluster_rate": 0.02894943941120394,
+  "semi_supervised": {
+    "0.05": {
+      "supervise": 0.5482921227482312,
+      "self_training": 0.543047246851802
+    },
+    "0.1": {
+      "supervise": 0.6273098544627029,
+      "self_training": 0.6336324813245559
+    },
+    "0.25": {
+      "supervise": 0.695258440164741,
+      "self_training": 0.6771927795583154
+    },
+    "1.0": {
+      "supervise": 0.6946766337253686,
+      "self_training": 0.6946766337253686
+    }
+  },
+  "hybrid": {
+    "champion": {
+      "pr_auc": 0.6946766337253686,
+      "precision@1pct": 0.7809278350515464,
+      "recall@1pct": 0.5782442748091603
+    },
+    "injection": {
+      "pr_auc": 0.4903440464561769,
+      "precision@1pct": 0.6144859813084113,
+      "recall@1pct": 0.5019083969465649
+    },
+    "HYBRIDE": {
+      "pr_auc": 0.645264653421511,
+      "precision@1pct": 0.6592741935483871,
+      "recall@1pct": 0.6240458015267175
+    }
+  }
+}
