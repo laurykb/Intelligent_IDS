@@ -1,6 +1,6 @@
 # P1 - Exploration des donnees (EDA) : resultats
 
-> Code : [`notebooks/01_exploration.py`](../../notebooks/01_exploration.py) -
+> Code : [`notebooks/01_exploration.ipynb`](../../notebooks/01_exploration.ipynb) -
 > Loader : [`src/data.py`](../../src/data.py) - Figures : `docs/assets/`
 
 ## Vue d'ensemble

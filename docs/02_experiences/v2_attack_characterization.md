@@ -1,6 +1,6 @@
 # Auto-critique v2 — B3 (caractérisation fine de l'attaque) + B4 (faisabilité)
 
-> Code : [`notebooks/12_attack_characterization.py`](../../notebooks/12_attack_characterization.py) -
+> Code : [`notebooks/12_attack_characterization.ipynb`](../../notebooks/12_attack_characterization.ipynb) -
 > Résultats : [`docs/03_evaluation/results_characterization.json`](../03_evaluation/results_characterization.json) -
 > Figure : `docs/assets/v2_attack_fingerprint.png`. Reste **in-scope** de
 > [autocritique_v2.md](../04_conclusion/autocritique_v2.md) (B3, B4).

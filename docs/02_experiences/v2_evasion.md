@@ -1,6 +1,6 @@
 # Vague 2 - Item 2 : attaquant adaptatif / évasion (réponse à A3)
 
-> Code : [`notebooks/08_evasion.py`](../../notebooks/08_evasion.py) -
+> Code : [`notebooks/08_evasion.ipynb`](../../notebooks/08_evasion.ipynb) -
 > Résultats : [`docs/03_evaluation/results_evasion.json`](../03_evaluation/results_evasion.json) -
 > Figure : `docs/assets/v2_evasion.png`. Répond à **A3** (robustesse / adversarial).
 

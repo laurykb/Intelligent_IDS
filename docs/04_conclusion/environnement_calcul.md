@@ -29,7 +29,7 @@ et uniquement pour la partie *deep*.
 
 ## 3. Preuve de reproductibilité cross-plateforme
 
-On a **recalculé sur la Machine B** le comparatif supervisé complet (`notebooks/03a_supervised.py`,
+On a **recalculé sur la Machine B** le comparatif supervisé complet (`notebooks/03a_supervised.ipynb`,
 mêmes versions figées) et confronté aux valeurs canoniques du Mac :
 
 | Modèle (PR-AUC, GroupKFold conducteur) | Mac | Windows | \|écart\| |

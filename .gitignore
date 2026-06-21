@@ -5,3 +5,4 @@ __pycache__/
 data/cache.parquet
 # Le CSV brut (852 Mo) : a ne pas versionner tel quel.
 data/DriverID_Full_Data_Downsampled.csv
+.ipynb_checkpoints/

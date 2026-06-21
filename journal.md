@@ -12,7 +12,7 @@
 - Nouveau projet : `/Users/laury/Documents/IDS_ORNL` (structure src/docs/notebooks/...).
 - Loader [`src/data.py`](src/data.py) : cache parquet (CSV de 852 Mo) + classification
   des colonnes en CAN (337) / GPS-inertie (320, confondeurs) / biometrie (HR/EDA/IBI) / meta.
-- EDA [`notebooks/01_exploration.py`](notebooks/01_exploration.py) + 3 figures.
+- EDA [`notebooks/01_exploration.ipynb`](notebooks/01_exploration.ipynb) + 3 figures.
 - Docs P0/P1 : contexte, problematique, plan, eda_findings.
 
 ### Decouvertes cles (EDA)
@@ -47,7 +47,7 @@
 ### Fait
 - [`src/features.py`](src/features.py) : jeux de features (CAN/BIO/GPS), detection des confondeurs
   temps (correlation a la progression du trajet), split par conducteur (driver_holdout) + split
-  aleatoire (pour demontrer la fuite). [`notebooks/02_preprocessing.py`](notebooks/02_preprocessing.py).
+  aleatoire (pour demontrer la fuite). [`notebooks/02_preprocessing.ipynb`](notebooks/02_preprocessing.ipynb).
 - Doc [`docs/01_projet/features.md`](docs/01_projet/features.md) + figure + `data/preprocessing.json`.
 
 ### Resultats (PR-AUC, Gradient Boosting ; hasard ~ 0,015)
@@ -70,7 +70,7 @@
 ## 2026-06-19 - P4 chemin A (apprentissage supervise)
 
 ### Fait
-- [`notebooks/03a_supervised.py`](notebooks/03a_supervised.py) : 4 modeles en GroupKFold par
+- [`notebooks/03a_supervised.ipynb`](notebooks/03a_supervised.ipynb) : 4 modeles en GroupKFold par
   conducteur (4 folds), PR-AUC, + ablation des modalites. Writeup
   [`docs/02_experiences/chemin_A_supervise.md`](docs/02_experiences/chemin_A_supervise.md) + figure.
 
@@ -93,7 +93,7 @@
 ## 2026-06-19 - P4 chemin B (detection d'anomalie)
 
 ### Fait
-- [`notebooks/03b_anomaly.py`](notebooks/03b_anomaly.py) : 4 detecteurs entraines sur le NORMAL
+- [`notebooks/03b_anomaly.ipynb`](notebooks/03b_anomaly.ipynb) : 4 detecteurs entraines sur le NORMAL
   des conducteurs de train (novelty detection), scores en GroupKFold par conducteur, PR-AUC.
   Writeup [`docs/02_experiences/chemin_B_anomalie.md`](docs/02_experiences/chemin_B_anomalie.md)
   + figure + `docs/03_evaluation/results_anomaly.json`.
@@ -120,9 +120,9 @@
 ## 2026-06-19 - P4 chemin C (deep : MLP + GRU temporel)
 
 ### Fait
-- [`notebooks/03c_deep_mlp.py`](notebooks/03c_deep_mlp.py) : MLP tabulaire (337 CAN, BatchNorm/
+- [`notebooks/03c_deep_mlp.ipynb`](notebooks/03c_deep_mlp.ipynb) : MLP tabulaire (337 CAN, BatchNorm/
   Dropout, pos_weight) en GroupKFold conducteur. PyTorch 2.12 (CPU).
-- [`notebooks/03d_deep_gru.py`](notebooks/03d_deep_gru.py) : GRU sur fenetres glissantes de 16 s
+- [`notebooks/03d_deep_gru.ipynb`](notebooks/03d_deep_gru.ipynb) : GRU sur fenetres glissantes de 16 s
   construites PAR CONDUCTEUR (capte la dynamique), meme validation.
 - Writeup [`docs/02_experiences/chemin_C_deep.md`](docs/02_experiences/chemin_C_deep.md) + figure
   `docs/assets/p4c_deep.png` + `docs/03_evaluation/results_deep.json`.
@@ -151,7 +151,7 @@
 ## 2026-06-19 - P5 (evaluation fine du champion Gradient Boosting / CAN)
 
 ### Fait
-- [`notebooks/04_evaluation.py`](notebooks/04_evaluation.py) : (1) predictions hors-fold ->
+- [`notebooks/04_evaluation.ipynb`](notebooks/04_evaluation.ipynb) : (1) predictions hors-fold ->
   courbe PR + table de seuils ; (2) leave-one-driver-out (50 conducteurs) ; (3) permutation
   importance des signaux CAN. Writeup [`docs/02_experiences/p5_evaluation.md`](docs/02_experiences/p5_evaluation.md)
   + figures `p5_pr_curve.png`, `p5_lodo_importance.png` + `docs/03_evaluation/results_evaluation.json`.
@@ -183,7 +183,7 @@
 ## 2026-06-19 - P5+ (fragilite Groupe 1 + robustesse)
 
 ### Fait
-- [`notebooks/05_group_analysis.py`](notebooks/05_group_analysis.py) : LODO par groupe, leave-one-
+- [`notebooks/05_group_analysis.ipynb`](notebooks/05_group_analysis.ipynb) : LODO par groupe, leave-one-
   GROUP-out (transfert), detectabilite intra-groupe, signature SPN 190 par groupe, robustesse bruit.
   Writeup [`docs/02_experiences/p5b_group_fragility.md`](docs/02_experiences/p5b_group_fragility.md)
   + figure `p5b_group_analysis.png` + `docs/03_evaluation/results_group_analysis.json`.

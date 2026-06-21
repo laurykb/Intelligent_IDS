@@ -1,6 +1,6 @@
 # P5 - Evaluation fine du champion (Gradient Boosting / CAN)
 
-> Code : [`notebooks/04_evaluation.py`](../../notebooks/04_evaluation.py) -
+> Code : [`notebooks/04_evaluation.ipynb`](../../notebooks/04_evaluation.ipynb) -
 > Resultats : [`docs/03_evaluation/results_evaluation.json`](../03_evaluation/results_evaluation.json)
 
 On caracterise le **champion** de P4 (Gradient Boosting sur les 337 signaux CAN,

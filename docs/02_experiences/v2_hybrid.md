@@ -1,6 +1,6 @@
 # Vague 2 - Item 4 : clustering, SVM-RBF, semi-supervisé, IDS hybride (réponse à A4)
 
-> Code : [`notebooks/10_clustering_hybrid.py`](../../notebooks/10_clustering_hybrid.py) -
+> Code : [`notebooks/10_clustering_hybrid.ipynb`](../../notebooks/10_clustering_hybrid.ipynb) -
 > Résultats : [`docs/03_evaluation/results_hybrid.json`](../03_evaluation/results_hybrid.json) -
 > Figure : `docs/assets/v2_hybrid.png`. Répond à **A4** (angles non explorés).
 > Split : driver_holdout (12 conducteurs test, anti-fuite) ; PR-AUC sur le test.

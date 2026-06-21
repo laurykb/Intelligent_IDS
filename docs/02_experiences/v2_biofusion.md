@@ -1,6 +1,6 @@
 # Vague 2 - Item 3 : fusion biométrie conditionnée par awareness (réponse à A5)
 
-> Code : [`notebooks/09_biometric_fusion.py`](../../notebooks/09_biometric_fusion.py) -
+> Code : [`notebooks/09_biometric_fusion.ipynb`](../../notebooks/09_biometric_fusion.ipynb) -
 > Résultats : [`docs/03_evaluation/results_biofusion.json`](../03_evaluation/results_biofusion.json) -
 > Figure : `docs/assets/v2_biofusion.png`. Répond à **A5** (biométrie + awareness sous-exploitées).
 

@@ -1,6 +1,6 @@
 # P4 - Chemin A : apprentissage supervise
 
-> Code : [`notebooks/03a_supervised.py`](../../notebooks/03a_supervised.py) -
+> Code : [`notebooks/03a_supervised.ipynb`](../../notebooks/03a_supervised.ipynb) -
 > Resultats : [`docs/03_evaluation/results_supervised.json`](../03_evaluation/results_supervised.json)
 
 ## Protocole

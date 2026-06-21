@@ -1,6 +1,6 @@
 # Vague 2 - Item 1 : isoler la signature d'injection (réponse à A1)
 
-> Code : [`notebooks/07_injection_signature.py`](../../notebooks/07_injection_signature.py) -
+> Code : [`notebooks/07_injection_signature.ipynb`](../../notebooks/07_injection_signature.ipynb) -
 > Résultats : [`docs/03_evaluation/results_injection.json`](../03_evaluation/results_injection.json) -
 > Figure : `docs/assets/v2_injection_signature.png`.
 > Répond à la faille **A1** ([autocritique.md](../04_conclusion/autocritique.md)) : *« on détecte

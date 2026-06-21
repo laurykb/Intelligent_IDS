@@ -8,10 +8,10 @@
 
 > État au 2026-06-19 (avant les runs) : la Vague 1 était faite à **5/7**. Restaient **2 runs de
 > calcul** à produire (mis en pause pour un PC plus rapide) :
-> - **Item 2 — optimisation d'hyperparamètres** : `notebooks/06b_tuning.py`
+> - **Item 2 — optimisation d'hyperparamètres** : `notebooks/06b_tuning.ipynb`
 >   (le run précédent avait **planté** par manque de mémoire ; le script est maintenant
 >   durci : `early_stopping`, `N_JOBS` modéré, float32).
-> - **Item 5 — multi-seed deep (MLP/GRU)** : `notebooks/06e_multiseed.py`.
+> - **Item 5 — multi-seed deep (MLP/GRU)** : `notebooks/06e_multiseed.ipynb`.
 
 ## 1. Ce qu'il faut copier sur l'autre PC
 
@@ -34,12 +34,12 @@ Versions figées dans `requirements.lock.txt` pour reproductibilité.
 
 ```bash
 # Item 2 — tuning (PR-AUC, GroupKFold conducteur). torch NON requis.
-python notebooks/06b_tuning.py
-#   moins de RAM :        N_JOBS=2 N_ITER=15 python notebooks/06b_tuning.py
-#   machine costaude :    N_JOBS=6 N_ITER=40 python notebooks/06b_tuning.py
+python notebooks/06b_tuning.ipynb
+#   moins de RAM :        N_JOBS=2 N_ITER=15 python notebooks/06b_tuning.ipynb
+#   machine costaude :    N_JOBS=6 N_ITER=40 python notebooks/06b_tuning.ipynb
 
 # Item 5 — multi-seed MLP + GRU (5 seeds). torch requis.
-python notebooks/06e_multiseed.py
+python notebooks/06e_multiseed.ipynb
 ```
 
 ### Durée à prévoir (réaliste)

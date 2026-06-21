@@ -1,6 +1,6 @@
 # Vague 2 - Item 5 : taxonomie de menaces + injections synthétiques (réponse à A3/B2)
 
-> Code : [`notebooks/11_threat_taxonomy.py`](../../notebooks/11_threat_taxonomy.py) -
+> Code : [`notebooks/11_threat_taxonomy.ipynb`](../../notebooks/11_threat_taxonomy.ipynb) -
 > Résultats : [`docs/03_evaluation/results_taxonomy.json`](../03_evaluation/results_taxonomy.json) -
 > Figure : `docs/assets/v2_taxonomy.png`. Répond à **B2** (modèle de menace étroit) / **A3**.
 

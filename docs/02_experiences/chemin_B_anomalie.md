@@ -1,6 +1,6 @@
 # P4 - Chemin B : detection d'anomalie
 
-> Code : [`notebooks/03b_anomaly.py`](../../notebooks/03b_anomaly.py) -
+> Code : [`notebooks/03b_anomaly.ipynb`](../../notebooks/03b_anomaly.ipynb) -
 > Resultats : [`docs/03_evaluation/results_anomaly.json`](../03_evaluation/results_anomaly.json)
 
 ## Pourquoi ce chemin

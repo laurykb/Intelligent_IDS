@@ -1,7 +1,7 @@
 # P4 - Chemin C : apprentissage profond (deep)
 
-> Code : [`notebooks/03c_deep_mlp.py`](../../notebooks/03c_deep_mlp.py) (MLP) &
-> [`notebooks/03d_deep_gru.py`](../../notebooks/03d_deep_gru.py) (GRU) -
+> Code : [`notebooks/03c_deep_mlp.ipynb`](../../notebooks/03c_deep_mlp.ipynb) (MLP) &
+> [`notebooks/03d_deep_gru.ipynb`](../../notebooks/03d_deep_gru.ipynb) (GRU) -
 > Resultats : [`docs/03_evaluation/results_deep.json`](../03_evaluation/results_deep.json)
 
 ## Question

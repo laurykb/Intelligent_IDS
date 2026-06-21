@@ -1,6 +1,6 @@
 # P5+ - Pourquoi l'IDS echoue sur le Groupe 1 (et robustesse)
 
-> Code : [`notebooks/05_group_analysis.py`](../../notebooks/05_group_analysis.py) -
+> Code : [`notebooks/05_group_analysis.ipynb`](../../notebooks/05_group_analysis.ipynb) -
 > Resultats : [`docs/03_evaluation/results_group_analysis.json`](../03_evaluation/results_group_analysis.json)
 
 En P5, le leave-one-driver-out s'effondrait sur ~6 conducteurs, **tous du Groupe 1**.

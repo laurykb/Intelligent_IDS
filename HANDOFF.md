@@ -69,10 +69,10 @@ L'attaque survient TOUJOURS au meme **lieu** (apres North Overland Trail) et a u
   bio(7) / vbox-GPS(312, confondeurs) / meta ; `usable()`.
 - [`src/features.py`](src/features.py) : `feature_sets()`, `time_drift()`,
   `drive_progress()`, `driver_holdout()`, `random_holdout()`.
-- [`notebooks/01_exploration.py`](notebooks/01_exploration.py) : EDA + 3 figures.
-- [`notebooks/02_preprocessing.py`](notebooks/02_preprocessing.py) : confondeurs,
+- [`notebooks/01_exploration.ipynb`](notebooks/01_exploration.ipynb) : EDA + 3 figures.
+- [`notebooks/02_preprocessing.ipynb`](notebooks/02_preprocessing.ipynb) : confondeurs,
   split conducteur, demos chiffrees ; ecrit `data/preprocessing.json`.
-- [`notebooks/03a_supervised.py`](notebooks/03a_supervised.py) : comparaison
+- [`notebooks/03a_supervised.ipynb`](notebooks/03a_supervised.ipynb) : comparaison
   supervisee (GroupKFold conducteur) + ablation modalites.
 
 ## 5. Conventions / gotchas techniques

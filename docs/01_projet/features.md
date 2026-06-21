@@ -1,7 +1,7 @@
 # P2/P3 - Pretraitement honnete et split par conducteur
 
 > Code : [`src/features.py`](../../src/features.py) -
-> [`notebooks/02_preprocessing.py`](../../notebooks/02_preprocessing.py)
+> [`notebooks/02_preprocessing.ipynb`](../../notebooks/02_preprocessing.ipynb)
 
 ## Objectif
 
